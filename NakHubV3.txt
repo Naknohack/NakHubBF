@@ -5,7 +5,7 @@ if Mode ~= "English" and Mode ~= "VietNammess" then
 end
 
 local English = "https://raw.githubusercontent.com/Naknohack/Nakhubredz/refs/heads/main/NakHubV3%20English.txt"
-local VietNammess = "https://raw.githubusercontent.com/Naknohack/Nakhubredz/refs/heads/main/NakHubV3%20VietNammess.txt"
+local VietNammess = "https://raw.githubusercontent.com/Naknohack/Nakhubredz/refs/heads/main/NakHubV3%20Vietnammes.txt"
 
 local link = (Mode == "VietNammess") and VietNammess or English
 
