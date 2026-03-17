@@ -8,46 +8,56 @@ local Start = Instance.new("TextButton")
 local Selected = nil
 
 ScreenGui.Parent = game.CoreGui
+ScreenGui.Name = "LanguageUI"
 
 Main.Parent = ScreenGui
-Main.BackgroundColor3 = Color3.fromRGB(20,20,20)
+Main.BackgroundColor3 = Color3.fromRGB(18,18,18)
 Main.Size = UDim2.new(0,650,0,360)
 Main.Position = UDim2.new(0.5,-325,0.5,-180)
 Main.BorderSizePixel = 0
 
 local Stroke = Instance.new("UIStroke",Main)
-Stroke.Color = Color3.fromRGB(255,70,150)
+Stroke.Color = Color3.fromRGB(255,60,150)
 Stroke.Thickness = 3
 
+local Corner = Instance.new("UICorner",Main)
+Corner.CornerRadius = UDim.new(0,10)
+
+-- ẢNH TRÊN
 TopImage.Parent = Main
 TopImage.BackgroundTransparency = 1
-TopImage.Size = UDim2.new(0,120,0,120)
-TopImage.Position = UDim2.new(0.5,-60,-0.15,0)
+TopImage.Size = UDim2.new(0,110,0,110)
+TopImage.Position = UDim2.new(0.5,-55,-0.15,0)
 TopImage.Image = "rbxassetid://100306458933414"
 
+-- KHUNG VIỆT NAM
 Left.Parent = Main
-Left.BackgroundColor3 = Color3.fromRGB(35,35,35)
+Left.BackgroundColor3 = Color3.fromRGB(30,30,30)
 Left.Size = UDim2.new(0,280,0,200)
 Left.Position = UDim2.new(0.05,0,0.25,0)
 
+Instance.new("UICorner",Left).CornerRadius = UDim.new(0,8)
+
 local LTitle = Instance.new("TextLabel",Left)
-LTitle.Size = UDim2.new(1,0,0,40)
+LTitle.Size = UDim2.new(1,0,0,35)
 LTitle.BackgroundTransparency = 1
 LTitle.Text = "Naknohack"
-LTitle.TextColor3 = Color3.fromRGB(255,255,255)
-LTitle.TextScaled = true
+LTitle.Font = Enum.Font.GothamBold
+LTitle.TextSize = 18
+LTitle.TextColor3 = Color3.new(1,1,1)
 
 local LLang = Instance.new("TextLabel",Left)
-LLang.Size = UDim2.new(1,0,0,40)
-LLang.Position = UDim2.new(0,0,0.25,0)
+LLang.Size = UDim2.new(1,0,0,30)
+LLang.Position = UDim2.new(0,0,0.2,0)
 LLang.BackgroundTransparency = 1
 LLang.Text = "Vietnammes"
+LLang.Font = Enum.Font.Gotham
+LLang.TextSize = 16
 LLang.TextColor3 = Color3.fromRGB(200,200,200)
-LLang.TextScaled = true
 
 local LFlag = Instance.new("TextLabel",Left)
 LFlag.Size = UDim2.new(0,120,0,120)
-LFlag.Position = UDim2.new(0.5,-60,0.45,-40)
+LFlag.Position = UDim2.new(0.5,-60,0.4,-30)
 LFlag.BackgroundTransparency = 1
 LFlag.Text = "🇻🇳"
 LFlag.TextScaled = true
@@ -56,32 +66,41 @@ local LSelect = Instance.new("TextButton",Left)
 LSelect.Size = UDim2.new(0.8,0,0,35)
 LSelect.Position = UDim2.new(0.1,0,0.82,0)
 LSelect.Text = "SELECT"
+LSelect.Font = Enum.Font.GothamBold
+LSelect.TextSize = 16
 LSelect.BackgroundColor3 = Color3.fromRGB(255,70,150)
 LSelect.TextColor3 = Color3.new(1,1,1)
 
+Instance.new("UICorner",LSelect).CornerRadius = UDim.new(0,6)
+
+-- KHUNG ENGLISH
 Right.Parent = Main
-Right.BackgroundColor3 = Color3.fromRGB(35,35,35)
+Right.BackgroundColor3 = Color3.fromRGB(30,30,30)
 Right.Size = UDim2.new(0,280,0,200)
 Right.Position = UDim2.new(0.53,0,0.25,0)
 
+Instance.new("UICorner",Right).CornerRadius = UDim.new(0,8)
+
 local RTitle = Instance.new("TextLabel",Right)
-RTitle.Size = UDim2.new(1,0,0,40)
+RTitle.Size = UDim2.new(1,0,0,35)
 RTitle.BackgroundTransparency = 1
 RTitle.Text = "Naknohack"
-RTitle.TextColor3 = Color3.fromRGB(255,255,255)
-RTitle.TextScaled = true
+RTitle.Font = Enum.Font.GothamBold
+RTitle.TextSize = 18
+RTitle.TextColor3 = Color3.new(1,1,1)
 
 local RLang = Instance.new("TextLabel",Right)
-RLang.Size = UDim2.new(1,0,0,40)
-RLang.Position = UDim2.new(0,0,0.25,0)
+RLang.Size = UDim2.new(1,0,0,30)
+RLang.Position = UDim2.new(0,0,0.2,0)
 RLang.BackgroundTransparency = 1
 RLang.Text = "English"
+RLang.Font = Enum.Font.Gotham
+RLang.TextSize = 16
 RLang.TextColor3 = Color3.fromRGB(200,200,200)
-RLang.TextScaled = true
 
 local RFlag = Instance.new("TextLabel",Right)
 RFlag.Size = UDim2.new(0,120,0,120)
-RFlag.Position = UDim2.new(0.5,-60,0.45,-40)
+RFlag.Position = UDim2.new(0.5,-60,0.4,-30)
 RFlag.BackgroundTransparency = 1
 RFlag.Text = "🇬🇧"
 RFlag.TextScaled = true
@@ -90,17 +109,26 @@ local RSelect = Instance.new("TextButton",Right)
 RSelect.Size = UDim2.new(0.8,0,0,35)
 RSelect.Position = UDim2.new(0.1,0,0.82,0)
 RSelect.Text = "SELECT"
+RSelect.Font = Enum.Font.GothamBold
+RSelect.TextSize = 16
 RSelect.BackgroundColor3 = Color3.fromRGB(255,70,150)
 RSelect.TextColor3 = Color3.new(1,1,1)
 
+Instance.new("UICorner",RSelect).CornerRadius = UDim.new(0,6)
+
+-- NÚT START
 Start.Parent = Main
 Start.Size = UDim2.new(0.9,0,0,50)
 Start.Position = UDim2.new(0.05,0,0.86,0)
 Start.Text = "START"
+Start.Font = Enum.Font.GothamBold
+Start.TextSize = 18
 Start.BackgroundColor3 = Color3.fromRGB(255,70,150)
 Start.TextColor3 = Color3.new(1,1,1)
-Start.TextScaled = true
 
+Instance.new("UICorner",Start).CornerRadius = UDim.new(0,8)
+
+-- CHỌN NGÔN NGỮ
 LSelect.MouseButton1Click:Connect(function()
     Selected = "VN"
 end)
@@ -109,10 +137,17 @@ RSelect.MouseButton1Click:Connect(function()
     Selected = "EN"
 end)
 
+-- BẤM START
 Start.MouseButton1Click:Connect(function()
+
+    -- UI biến mất ngay
+    ScreenGui:Destroy()
+
     if Selected == "EN" then
         loadstring(game:HttpGet("https://raw.githubusercontent.com/Naknohack/Nakhubredz/refs/heads/main/NakHubV3%20English.txt"))()
+        
     elseif Selected == "VN" then
         loadstring(game:HttpGet("https://raw.githubusercontent.com/Naknohack/Nakhubredz/refs/heads/main/NakHubV3%20VietNammess.txt"))()
     end
+
 end)
