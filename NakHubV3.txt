@@ -1,12 +1,118 @@
-local Mode = _G.Mode
+local ScreenGui = Instance.new("ScreenGui")
+local Main = Instance.new("Frame")
+local TopImage = Instance.new("ImageLabel")
+local Left = Instance.new("Frame")
+local Right = Instance.new("Frame")
+local Start = Instance.new("TextButton")
 
-if Mode ~= "English" and Mode ~= "VietNammess" then
-	Mode = "English"
-end
+local Selected = nil
 
-local English = "https://raw.githubusercontent.com/Naknohack/Nakhubredz/refs/heads/main/NakHubV3%20English.txt"
-local VietNammess = "https://raw.githubusercontent.com/Naknohack/Nakhubredz/refs/heads/main/NakHubV3%20Vietnammes.txt"
+ScreenGui.Parent = game.CoreGui
 
-local link = (Mode == "VietNammess") and VietNammess or English
+Main.Parent = ScreenGui
+Main.BackgroundColor3 = Color3.fromRGB(20,20,20)
+Main.Size = UDim2.new(0,650,0,360)
+Main.Position = UDim2.new(0.5,-325,0.5,-180)
+Main.BorderSizePixel = 0
 
-loadstring(game:HttpGet(link))()
+local Stroke = Instance.new("UIStroke",Main)
+Stroke.Color = Color3.fromRGB(255,70,150)
+Stroke.Thickness = 3
+
+TopImage.Parent = Main
+TopImage.BackgroundTransparency = 1
+TopImage.Size = UDim2.new(0,120,0,120)
+TopImage.Position = UDim2.new(0.5,-60,-0.15,0)
+TopImage.Image = "rbxassetid://100306458933414"
+
+Left.Parent = Main
+Left.BackgroundColor3 = Color3.fromRGB(35,35,35)
+Left.Size = UDim2.new(0,280,0,200)
+Left.Position = UDim2.new(0.05,0,0.25,0)
+
+local LTitle = Instance.new("TextLabel",Left)
+LTitle.Size = UDim2.new(1,0,0,40)
+LTitle.BackgroundTransparency = 1
+LTitle.Text = "Naknohack"
+LTitle.TextColor3 = Color3.fromRGB(255,255,255)
+LTitle.TextScaled = true
+
+local LLang = Instance.new("TextLabel",Left)
+LLang.Size = UDim2.new(1,0,0,40)
+LLang.Position = UDim2.new(0,0,0.25,0)
+LLang.BackgroundTransparency = 1
+LLang.Text = "Vietnammes"
+LLang.TextColor3 = Color3.fromRGB(200,200,200)
+LLang.TextScaled = true
+
+local LFlag = Instance.new("TextLabel",Left)
+LFlag.Size = UDim2.new(0,120,0,120)
+LFlag.Position = UDim2.new(0.5,-60,0.45,-40)
+LFlag.BackgroundTransparency = 1
+LFlag.Text = "🇻🇳"
+LFlag.TextScaled = true
+
+local LSelect = Instance.new("TextButton",Left)
+LSelect.Size = UDim2.new(0.8,0,0,35)
+LSelect.Position = UDim2.new(0.1,0,0.82,0)
+LSelect.Text = "SELECT"
+LSelect.BackgroundColor3 = Color3.fromRGB(255,70,150)
+LSelect.TextColor3 = Color3.new(1,1,1)
+
+Right.Parent = Main
+Right.BackgroundColor3 = Color3.fromRGB(35,35,35)
+Right.Size = UDim2.new(0,280,0,200)
+Right.Position = UDim2.new(0.53,0,0.25,0)
+
+local RTitle = Instance.new("TextLabel",Right)
+RTitle.Size = UDim2.new(1,0,0,40)
+RTitle.BackgroundTransparency = 1
+RTitle.Text = "Naknohack"
+RTitle.TextColor3 = Color3.fromRGB(255,255,255)
+RTitle.TextScaled = true
+
+local RLang = Instance.new("TextLabel",Right)
+RLang.Size = UDim2.new(1,0,0,40)
+RLang.Position = UDim2.new(0,0,0.25,0)
+RLang.BackgroundTransparency = 1
+RLang.Text = "English"
+RLang.TextColor3 = Color3.fromRGB(200,200,200)
+RLang.TextScaled = true
+
+local RFlag = Instance.new("TextLabel",Right)
+RFlag.Size = UDim2.new(0,120,0,120)
+RFlag.Position = UDim2.new(0.5,-60,0.45,-40)
+RFlag.BackgroundTransparency = 1
+RFlag.Text = "🇬🇧"
+RFlag.TextScaled = true
+
+local RSelect = Instance.new("TextButton",Right)
+RSelect.Size = UDim2.new(0.8,0,0,35)
+RSelect.Position = UDim2.new(0.1,0,0.82,0)
+RSelect.Text = "SELECT"
+RSelect.BackgroundColor3 = Color3.fromRGB(255,70,150)
+RSelect.TextColor3 = Color3.new(1,1,1)
+
+Start.Parent = Main
+Start.Size = UDim2.new(0.9,0,0,50)
+Start.Position = UDim2.new(0.05,0,0.86,0)
+Start.Text = "START"
+Start.BackgroundColor3 = Color3.fromRGB(255,70,150)
+Start.TextColor3 = Color3.new(1,1,1)
+Start.TextScaled = true
+
+LSelect.MouseButton1Click:Connect(function()
+    Selected = "VN"
+end)
+
+RSelect.MouseButton1Click:Connect(function()
+    Selected = "EN"
+end)
+
+Start.MouseButton1Click:Connect(function()
+    if Selected == "EN" then
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/Naknohack/Nakhubredz/refs/heads/main/NakHubV3%20English.txt"))()
+    elseif Selected == "VN" then
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/Naknohack/Nakhubredz/refs/heads/main/NakHubV3%20VietNammess.txt"))()
+    end
+end)
