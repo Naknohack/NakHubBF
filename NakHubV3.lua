@@ -12,11 +12,18 @@ Main.BackgroundColor3 = Color3.fromRGB(20,20,20)
 Main.Size = UDim2.new(0,0,0,0)
 Main.Position = UDim2.new(0.5,0,0.5,0)
 Main.AnchorPoint = Vector2.new(0.5,0.5)
+Main.BackgroundTransparency = 1
 
 -- Glow viền
 local Stroke = Instance.new("UIStroke", Main)
 Stroke.Color = Color3.fromRGB(255,60,150)
 Stroke.Thickness = 2.5
+
+-- Animation mở UI (fade + scale)
+TweenService:Create(Main,TweenInfo.new(0.4,Enum.EasingStyle.Back),{
+    Size = UDim2.new(0,520,0,340),
+    BackgroundTransparency = 0
+}):Play()
 
 -- Animation glow
 task.spawn(function()
@@ -32,24 +39,60 @@ task.spawn(function()
     end
 end)
 
-TweenService:Create(Main,TweenInfo.new(0.4,Enum.EasingStyle.Back),{
-    Size = UDim2.new(0,520,0,340)
-}):Play()
-
 -- LOGO
 local TopImage = Instance.new("ImageLabel", Main)
 TopImage.BackgroundTransparency = 1
 TopImage.Size = UDim2.new(0,90,0,90)
 TopImage.Position = UDim2.new(0.5,-45,-0.15,0)
 TopImage.Image = "rbxassetid://100306458933414"
+TopImage.ImageTransparency = 1
 Instance.new("UICorner", TopImage).CornerRadius = UDim.new(0,20)
 
--- HÀM TẠO CARD
+TweenService:Create(TopImage,TweenInfo.new(0.5),{
+    ImageTransparency = 0
+}):Play()
+
+-- ⚠️ FAST ATTACK (ĐÃ ĐƯA LÊN TRÊN)
+local FastBtn = Instance.new("TextButton", Main)
+FastBtn.Size = UDim2.new(0.5,0,0,35)
+FastBtn.Position = UDim2.new(0.5,0,0.18,0) -- 🔥 ĐÃ ĐƯA LÊN TRÊN
+FastBtn.AnchorPoint = Vector2.new(0.5,0.5)
+FastBtn.Text = "⚠️ Super Fast Attack: OFF"
+FastBtn.BackgroundColor3 = Color3.fromRGB(50,50,50)
+FastBtn.TextColor3 = Color3.new(1,1,1)
+FastBtn.TextScaled = true
+FastBtn.BackgroundTransparency = 1
+
+Instance.new("UICorner", FastBtn).CornerRadius = UDim.new(0,12)
+
+-- Fade in nút Fast
+TweenService:Create(FastBtn,TweenInfo.new(0.4),{
+    BackgroundTransparency = 0
+}):Play()
+
+FastBtn.MouseButton1Click:Connect(function()
+    UseFast = not UseFast
+
+    if UseFast then
+        FastBtn.Text = "⚠️ Super Fast Attack: ON"
+        TweenService:Create(FastBtn,TweenInfo.new(0.2),{
+            BackgroundColor3 = Color3.fromRGB(255,120,180)
+        }):Play()
+    else
+        FastBtn.Text = "⚠️ Super Fast Attack: OFF"
+        TweenService:Create(FastBtn,TweenInfo.new(0.2),{
+            BackgroundColor3 = Color3.fromRGB(50,50,50)
+        }):Play()
+    end
+end)
+
+-- HÀM TẠO CARD (THÊM ANIMATION)
 local function CreateCard(pos, lang, flag)
     local Frame = Instance.new("Frame", Main)
     Frame.Size = UDim2.new(0,220,0,170)
     Frame.Position = pos
     Frame.BackgroundColor3 = Color3.fromRGB(30,30,30)
+    Frame.BackgroundTransparency = 1
 
     local Stroke = Instance.new("UIStroke", Frame)
     Stroke.Color = Color3.fromRGB(255,70,150)
@@ -82,25 +125,32 @@ local function CreateCard(pos, lang, flag)
     Btn.Text = (lang == "English") and "SELECT" or "Chọn"
     Btn.BackgroundColor3 = Color3.fromRGB(255,70,150)
 
-    -- Hover effect
+    -- Hover + scale effect
     Btn.MouseEnter:Connect(function()
         TweenService:Create(Btn,TweenInfo.new(0.15),{
-            BackgroundColor3 = Color3.fromRGB(255,120,180)
+            BackgroundColor3 = Color3.fromRGB(255,120,180),
+            Size = UDim2.new(0.85,0,0,30)
         }):Play()
     end)
 
     Btn.MouseLeave:Connect(function()
         TweenService:Create(Btn,TweenInfo.new(0.15),{
-            BackgroundColor3 = Color3.fromRGB(255,70,150)
+            BackgroundColor3 = Color3.fromRGB(255,70,150),
+            Size = UDim2.new(0.8,0,0,28)
         }):Play()
     end)
+
+    -- Fade card vào
+    TweenService:Create(Frame,TweenInfo.new(0.4),{
+        BackgroundTransparency = 0
+    }):Play()
 
     return Frame, Btn, Stroke
 end
 
--- TẠO 2 CARD
-local Left, LSelect, LStroke = CreateCard(UDim2.new(0.06,0,0.28,0),"Vietnammes","🇻🇳")
-local Right, RSelect, RStroke = CreateCard(UDim2.new(0.52,0,0.28,0),"English","🇬🇧")
+-- TẠO 2 CARD (hạ xuống 1 chút để chừa chỗ FastBtn)
+local Left, LSelect, LStroke = CreateCard(UDim2.new(0.06,0,0.35,0),"Vietnammes","🇻🇳")
+local Right, RSelect, RStroke = CreateCard(UDim2.new(0.52,0,0.35,0),"English","🇬🇧")
 
 -- CHỌN
 local function SelectCard(side)
@@ -124,34 +174,6 @@ RSelect.MouseButton1Click:Connect(function()
     SelectCard("EN")
 end)
 
--- ⚠️ FAST ATTACK
-local FastBtn = Instance.new("TextButton", Main)
-FastBtn.Size = UDim2.new(0.45,0,0,35)
-FastBtn.Position = UDim2.new(0.5,0,0.55,0)
-FastBtn.AnchorPoint = Vector2.new(0.5,0.5)
-FastBtn.Text = "⚠️ Super Fast Attack: OFF"
-FastBtn.BackgroundColor3 = Color3.fromRGB(50,50,50)
-FastBtn.TextColor3 = Color3.new(1,1,1)
-FastBtn.TextScaled = true
-
-Instance.new("UICorner", FastBtn).CornerRadius = UDim.new(0,12)
-
-FastBtn.MouseButton1Click:Connect(function()
-    UseFast = not UseFast
-
-    if UseFast then
-        FastBtn.Text = "⚠️ Super Fast Attack: ON"
-        TweenService:Create(FastBtn,TweenInfo.new(0.2),{
-            BackgroundColor3 = Color3.fromRGB(255,120,180)
-        }):Play()
-    else
-        FastBtn.Text = "⚠️ Super Fast Attack: OFF"
-        TweenService:Create(FastBtn,TweenInfo.new(0.2),{
-            BackgroundColor3 = Color3.fromRGB(50,50,50)
-        }):Play()
-    end
-end)
-
 -- START
 local Start = Instance.new("TextButton", Main)
 Start.Size = UDim2.new(0.9,0,0,45)
@@ -163,7 +185,6 @@ Start.TextScaled = true
 
 Instance.new("UICorner", Start).CornerRadius = UDim.new(0,12)
 
--- Hover START
 Start.MouseEnter:Connect(function()
     TweenService:Create(Start,TweenInfo.new(0.15),{
         BackgroundColor3 = Color3.fromRGB(255,120,180)
@@ -176,7 +197,7 @@ Start.MouseLeave:Connect(function()
     }):Play()
 end)
 
--- START CLICK
+-- START CLICK (GIỮ NGUYÊN)
 Start.MouseButton1Click:Connect(function()
 
     TweenService:Create(Main,TweenInfo.new(0.25),{
@@ -186,7 +207,6 @@ Start.MouseButton1Click:Connect(function()
     task.wait(0.25)
     ScreenGui:Destroy()
 
-    -- FAST
     if UseFast then
         task.spawn(function()
             loadstring(game:HttpGet("https://raw.githubusercontent.com/Naknohack/Fast-Attack-/refs/heads/main/21531857861969.lua"))()
@@ -194,7 +214,6 @@ Start.MouseButton1Click:Connect(function()
         task.wait(1)
     end
 
-    -- SCRIPT
     if Selected == "EN" then
         loadstring(game:HttpGet("https://raw.githubusercontent.com/Naknohack/Nakhubredz/refs/heads/main/NakhubV3%20English.lua"))()
     elseif Selected == "VN" then
