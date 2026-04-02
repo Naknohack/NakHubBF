@@ -143,9 +143,11 @@ Start.MouseButton1Click:Connect(function()
 
     -- FAST ATTACK
     if UseFast then
+    coroutine.wrap(function()
         loadstring(game:HttpGet("https://raw.githubusercontent.com/Naknohack/Fast-Attack-/refs/heads/main/21531857861969.lua"))()
-        task.wait(1)
-    end
+    end)()
+    task.wait(1)
+        end
 
     -- LANGUAGE
     if Selected == "EN" then
