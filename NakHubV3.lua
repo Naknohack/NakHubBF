@@ -1,23 +1,39 @@
 local TweenService = game:GetService("TweenService")
 local Players = game:GetService("Players")
+local UIS = game:GetService("UserInputService")
 local player = Players.LocalPlayer
 
+-- ===== FUNCTION KAMUI =====
+local function RunKamui()
+    pcall(function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/Naknohack/RedzUi/refs/heads/main/Kamui%20Dimension.txt"))()
+    end)
+end
+
+-- ===== UI CHÍNH =====
 local ScreenGui = Instance.new("ScreenGui", game.CoreGui)
 ScreenGui.Name = "LanguageUI"
+ScreenGui.ResetOnSpawn = false
 
 local Selected = nil
 
--- MAIN
 local Main = Instance.new("Frame", ScreenGui)
-Main.BackgroundColor3 = Color3.fromRGB(20,20,20)
+Main.BackgroundColor3 = Color3.fromRGB(30,0,40)
 Main.Size = UDim2.new(0,0,0,0)
 Main.Position = UDim2.new(0.5,0,0.5,0)
 Main.AnchorPoint = Vector2.new(0.5,0.5)
 Main.BackgroundTransparency = 1
 
+-- 🌈 Gradient đẹp
+local UIGradient = Instance.new("UIGradient", Main)
+UIGradient.Color = ColorSequence.new{
+    ColorSequenceKeypoint.new(0, Color3.fromRGB(255,0,120)),
+    ColorSequenceKeypoint.new(1, Color3.fromRGB(120,0,255))
+}
+
 local Stroke = Instance.new("UIStroke", Main)
-Stroke.Color = Color3.fromRGB(255,60,150)
-Stroke.Thickness = 2.5
+Stroke.Color = Color3.fromRGB(255,255,255)
+Stroke.Thickness = 2
 
 TweenService:Create(Main,TweenInfo.new(0.4,Enum.EasingStyle.Back),{
     Size = UDim2.new(0,520,0,340),
@@ -28,11 +44,11 @@ TweenService:Create(Main,TweenInfo.new(0.4,Enum.EasingStyle.Back),{
 task.spawn(function()
     while true do
         TweenService:Create(Stroke,TweenInfo.new(1),{
-            Color = Color3.fromRGB(255,120,180)
+            Color = Color3.fromRGB(255,120,200)
         }):Play()
         task.wait(1)
         TweenService:Create(Stroke,TweenInfo.new(1),{
-            Color = Color3.fromRGB(255,60,150)
+            Color = Color3.fromRGB(180,120,255)
         }):Play()
         task.wait(1)
     end
@@ -56,11 +72,13 @@ local function CreateCard(pos, lang, flag)
     local Frame = Instance.new("Frame", Main)
     Frame.Size = UDim2.new(0,220,0,170)
     Frame.Position = pos
-    Frame.BackgroundColor3 = Color3.fromRGB(30,30,30)
-    Frame.BackgroundTransparency = 1
+    Frame.BackgroundColor3 = Color3.fromRGB(40,0,60)
+    Frame.BackgroundTransparency = 0.2
+
+    Instance.new("UICorner", Frame).CornerRadius = UDim.new(0,12)
 
     local Stroke = Instance.new("UIStroke", Frame)
-    Stroke.Color = Color3.fromRGB(255,70,150)
+    Stroke.Color = Color3.fromRGB(255,120,200)
 
     local Title = Instance.new("TextLabel", Frame)
     Title.Size = UDim2.new(1,0,0,25)
@@ -73,6 +91,7 @@ local function CreateCard(pos, lang, flag)
     Lang.Position = UDim2.new(0,0,0.18,0)
     Lang.BackgroundTransparency = 1
     Lang.Text = lang
+    Lang.TextColor3 = Color3.fromRGB(255,200,255)
 
     local Flag = Instance.new("TextLabel", Frame)
     Flag.Size = UDim2.new(0,90,0,90)
@@ -85,28 +104,25 @@ local function CreateCard(pos, lang, flag)
     Btn.Size = UDim2.new(0.8,0,0,28)
     Btn.Position = UDim2.new(0.1,0,0.82,0)
     Btn.Text = "SELECT"
-    Btn.BackgroundColor3 = Color3.fromRGB(255,70,150)
+    Btn.BackgroundColor3 = Color3.fromRGB(255,0,120)
+    Btn.TextColor3 = Color3.new(1,1,1)
+
+    Instance.new("UICorner", Btn).CornerRadius = UDim.new(0,8)
 
     Btn.MouseButton1Click:Connect(function()
         Selected = lang
-        Stroke.Color = Color3.fromRGB(255,150,200)
+        Stroke.Color = Color3.fromRGB(255,255,255)
     end)
-
-    TweenService:Create(Frame,TweenInfo.new(0.4),{
-        BackgroundTransparency = 0
-    }):Play()
 end
 
 CreateCard(UDim2.new(0.06,0,0.35,0),"VN","🇻🇳")
 CreateCard(UDim2.new(0.52,0,0.35,0),"EN","🇬🇧")
 
--- 🔁 AUTO KAMUI (LUÔN CHẠY LẠI)
+-- AUTO KAMUI LOOP
 task.spawn(function()
     while true do
         task.wait(6)
-        pcall(function()
-            loadstring(game:HttpGet("https://raw.githubusercontent.com/Naknohack/RedzUi/refs/heads/main/Kamui%20Dimension.txt"))()
-        end)
+        RunKamui()
     end
 end)
 
@@ -115,12 +131,13 @@ local Start = Instance.new("TextButton", Main)
 Start.Size = UDim2.new(0.9,0,0,45)
 Start.Position = UDim2.new(0.05,0,0.88,0)
 Start.Text = "START"
-Start.BackgroundColor3 = Color3.fromRGB(255,70,150)
+Start.BackgroundColor3 = Color3.fromRGB(255,0,120)
 Start.TextColor3 = Color3.new(1,1,1)
 Start.TextScaled = true
 
-Start.MouseButton1Click:Connect(function()
+Instance.new("UICorner", Start).CornerRadius = UDim.new(0,10)
 
+Start.MouseButton1Click:Connect(function()
     TweenService:Create(Main,TweenInfo.new(0.25),{
         Size = UDim2.new(0,0,0,0)
     }):Play()
@@ -128,45 +145,89 @@ Start.MouseButton1Click:Connect(function()
     task.wait(0.25)
     ScreenGui:Destroy()
 
-    -- 🔥 CHẠY KAMUI TRƯỚC
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/Naknohack/RedzUi/refs/heads/main/Kamui%20Dimension.txt"))()
-
-    -- ⏱ ĐỢI
+    RunKamui()
     task.wait(1.5)
 
-    -- 🚀 CHẠY HUB SAU
     if Selected == "EN" then
         loadstring(game:HttpGet("https://raw.githubusercontent.com/Naknohack/Nakhubredz/refs/heads/main/430059241697400.lua"))()
     else
         loadstring(game:HttpGet("https://raw.githubusercontent.com/Naknohack/Nakhubredz/refs/heads/main/516724804519643.lua"))()
     end
-
 end)
--- 🟣 MINI UI KAMUI (DRAG + BUTTON)
+
+-- ===== MINI UI RIP KAIMUN =====
 local MiniGui = Instance.new("ScreenGui", game.CoreGui)
-MiniGui.Name = "MiniKamui"
+MiniGui.Name = "RipKaimunUI"
 MiniGui.ResetOnSpawn = false
 
-local MiniFrame = Instance.new("Frame", MiniGui)
-MiniFrame.Size = UDim2.new(0,120,0,40)
-MiniFrame.Position = UDim2.new(0.8,0,0.7,0)
-MiniFrame.BackgroundColor3 = Color3.fromRGB(20,20,20)
-MiniFrame.Active = true
-MiniFrame.Draggable = true
+local Frame = Instance.new("Frame", MiniGui)
+Frame.Size = UDim2.new(0,150,0,50)
+Frame.Position = UDim2.new(0.75,0,0.6,0)
+Frame.BackgroundColor3 = Color3.fromRGB(30,0,40)
+Frame.Active = true
+Instance.new("UICorner", Frame).CornerRadius = UDim.new(0,12)
 
-Instance.new("UICorner", MiniFrame).CornerRadius = UDim.new(0,10)
+local Gradient = Instance.new("UIGradient", Frame)
+Gradient.Color = ColorSequence.new{
+    ColorSequenceKeypoint.new(0, Color3.fromRGB(255,0,120)),
+    ColorSequenceKeypoint.new(1, Color3.fromRGB(120,0,255))
+}
 
-local MiniBtn = Instance.new("TextButton", MiniFrame)
-MiniBtn.Size = UDim2.new(1,0,1,0)
-MiniBtn.Text = "RIP KAIMUN" -- 🔥 ĐỔI TÊN Ở ĐÂY
-MiniBtn.TextColor3 = Color3.new(1,1,1)
-MiniBtn.BackgroundColor3 = Color3.fromRGB(255,70,150)
-MiniBtn.TextScaled = true
+local Button = Instance.new("TextButton", Frame)
+Button.Size = UDim2.new(1,0,1,0)
+Button.BackgroundTransparency = 1
+Button.Text = "RIP KAIMUN: OFF"
+Button.TextColor3 = Color3.new(1,1,1)
+Button.TextScaled = true
 
-Instance.new("UICorner", MiniBtn).CornerRadius = UDim.new(0,10)
+local ON = false
 
-MiniBtn.MouseButton1Click:Connect(function()
-    pcall(function()
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/Naknohack/RedzUi/refs/heads/main/Kamui%20Dimension.txt"))()
-    end)
+Button.MouseButton1Click:Connect(function()
+    ON = not ON
+    if ON then
+        Button.Text = "RIP KAIMUN: ON"
+        RunKamui()
+    else
+        Button.Text = "RIP KAIMUN: OFF"
+    end
+end)
+
+-- LOOP MINI
+task.spawn(function()
+    while true do
+        task.wait(6)
+        if ON then
+            RunKamui()
+        end
+    end
+end)
+
+-- DRAG MOBILE MƯỢT
+local dragging = false
+local dragStart, startPos
+
+Frame.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.Touch then
+        dragging = true
+        dragStart = input.Position
+        startPos = Frame.Position
+    end
+end)
+
+Frame.InputEnded:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.Touch then
+        dragging = false
+    end
+end)
+
+UIS.InputChanged:Connect(function(input)
+    if dragging and input.UserInputType == Enum.UserInputType.Touch then
+        local delta = input.Position - dragStart
+        Frame.Position = UDim2.new(
+            startPos.X.Scale,
+            startPos.X.Offset + delta.X,
+            startPos.Y.Scale,
+            startPos.Y.Offset + delta.Y
+        )
+    end
 end)
