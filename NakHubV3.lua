@@ -6,8 +6,6 @@ local ScreenGui = Instance.new("ScreenGui", game.CoreGui)
 ScreenGui.Name = "LanguageUI"
 
 local Selected = nil
-local UseFast = false
-local RunningKamui = false
 
 -- MAIN
 local Main = Instance.new("Frame", ScreenGui)
@@ -26,6 +24,7 @@ TweenService:Create(Main,TweenInfo.new(0.4,Enum.EasingStyle.Back),{
     BackgroundTransparency = 0
 }):Play()
 
+-- Glow
 task.spawn(function()
     while true do
         TweenService:Create(Stroke,TweenInfo.new(1),{
@@ -51,39 +50,6 @@ Instance.new("UICorner", TopImage).CornerRadius = UDim.new(0,20)
 TweenService:Create(TopImage,TweenInfo.new(0.5),{
     ImageTransparency = 0
 }):Play()
-
--- FAST BUTTON
-local FastBtn = Instance.new("TextButton", Main)
-FastBtn.Size = UDim2.new(0.5,0,0,35)
-FastBtn.Position = UDim2.new(0.5,0,0.18,0)
-FastBtn.AnchorPoint = Vector2.new(0.5,0.5)
-FastBtn.Text = "⚠️ Super Fast Attack: OFF"
-FastBtn.BackgroundColor3 = Color3.fromRGB(50,50,50)
-FastBtn.TextColor3 = Color3.new(1,1,1)
-FastBtn.TextScaled = true
-FastBtn.BackgroundTransparency = 1
-
-Instance.new("UICorner", FastBtn).CornerRadius = UDim.new(0,12)
-
-TweenService:Create(FastBtn,TweenInfo.new(0.4),{
-    BackgroundTransparency = 0
-}):Play()
-
-FastBtn.MouseButton1Click:Connect(function()
-    UseFast = not UseFast
-
-    if UseFast then
-        FastBtn.Text = "⚠️ Super Fast Attack: ON"
-        TweenService:Create(FastBtn,TweenInfo.new(0.2),{
-            BackgroundColor3 = Color3.fromRGB(255,120,180)
-        }):Play()
-    else
-        FastBtn.Text = "⚠️ Super Fast Attack: OFF"
-        TweenService:Create(FastBtn,TweenInfo.new(0.2),{
-            BackgroundColor3 = Color3.fromRGB(50,50,50)
-        }):Play()
-    end
-end)
 
 -- CARD
 local function CreateCard(pos, lang, flag)
@@ -118,44 +84,31 @@ local function CreateCard(pos, lang, flag)
     local Btn = Instance.new("TextButton", Frame)
     Btn.Size = UDim2.new(0.8,0,0,28)
     Btn.Position = UDim2.new(0.1,0,0.82,0)
-    Btn.Text = (lang == "English") and "SELECT" or "Chọn"
+    Btn.Text = "SELECT"
     Btn.BackgroundColor3 = Color3.fromRGB(255,70,150)
 
-    return Frame, Btn, Stroke
-end
-
-local Left, LSelect, LStroke = CreateCard(UDim2.new(0.06,0,0.35,0),"Vietnammes","🇻🇳")
-local Right, RSelect, RStroke = CreateCard(UDim2.new(0.52,0,0.35,0),"English","🇬🇧")
-
-local function SelectCard(side)
-    Selected = side
-    LStroke.Color = side == "VN" and Color3.fromRGB(255,150,200) or Color3.fromRGB(255,70,150)
-    RStroke.Color = side == "EN" and Color3.fromRGB(255,150,200) or Color3.fromRGB(255,70,150)
-end
-
-LSelect.MouseButton1Click:Connect(function() SelectCard("VN") end)
-RSelect.MouseButton1Click:Connect(function() SelectCard("EN") end)
-
--- LINK
-local Kamui = "https://raw.githubusercontent.com/Naknohack/RedzUi/refs/heads/main/Kamui%20Dimension.txt"
-local Fast = "https://raw.githubusercontent.com/Naknohack/Fast-Attack-/refs/heads/main/21531857861969.lua"
-local HubVN = "https://raw.githubusercontent.com/Naknohack/Nakhubredz/refs/heads/main/516724804519643.lua"
-local HubEN = "https://raw.githubusercontent.com/Naknohack/Nakhubredz/refs/heads/main/430059241697400.lua"
-
--- RUN KAMUI (ANTI SPAM)
-local function RunKamui()
-    if RunningKamui then return end
-    RunningKamui = true
-
-    task.spawn(function()
-        task.wait(2)
-        pcall(function()
-            loadstring(game:HttpGet(Kamui))()
-        end)
-        task.wait(5)
-        RunningKamui = false
+    Btn.MouseButton1Click:Connect(function()
+        Selected = lang
+        Stroke.Color = Color3.fromRGB(255,150,200)
     end)
+
+    TweenService:Create(Frame,TweenInfo.new(0.4),{
+        BackgroundTransparency = 0
+    }):Play()
 end
+
+CreateCard(UDim2.new(0.06,0,0.35,0),"VN","🇻🇳")
+CreateCard(UDim2.new(0.52,0,0.35,0),"EN","🇬🇧")
+
+-- 🔁 AUTO KAMUI (LUÔN CHẠY LẠI)
+task.spawn(function()
+    while true do
+        task.wait(6)
+        pcall(function()
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/Naknohack/RedzUi/refs/heads/main/Kamui%20Dimension.txt"))()
+        end)
+    end
+end)
 
 -- START
 local Start = Instance.new("TextButton", Main)
@@ -166,8 +119,6 @@ Start.BackgroundColor3 = Color3.fromRGB(255,70,150)
 Start.TextColor3 = Color3.new(1,1,1)
 Start.TextScaled = true
 
-Instance.new("UICorner", Start)
-
 Start.MouseButton1Click:Connect(function()
 
     TweenService:Create(Main,TweenInfo.new(0.25),{
@@ -177,44 +128,45 @@ Start.MouseButton1Click:Connect(function()
     task.wait(0.25)
     ScreenGui:Destroy()
 
-    task.spawn(function()
+    -- 🔥 CHẠY KAMUI TRƯỚC
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/Naknohack/RedzUi/refs/heads/main/Kamui%20Dimension.txt"))()
 
-        -- 1️⃣ HUB
-        if Selected == "EN" then
-            pcall(function()
-                loadstring(game:HttpGet(HubEN))()
-            end)
-        else
-            pcall(function()
-                loadstring(game:HttpGet(HubVN))()
-            end)
-        end
+    -- ⏱ ĐỢI
+    task.wait(1.5)
 
-        task.wait(3)
+    -- 🚀 CHẠY HUB SAU
+    if Selected == "EN" then
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/Naknohack/Nakhubredz/refs/heads/main/430059241697400.lua"))()
+    else
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/Naknohack/Nakhubredz/refs/heads/main/516724804519643.lua"))()
+    end
 
-        -- 2️⃣ FAST ATTACK
-        if UseFast then
-            pcall(function()
-                loadstring(game:HttpGet(Fast))()
-            end)
-        end
+end)
+-- 🟣 MINI UI KAMUI (DRAG + BUTTON)
+local MiniGui = Instance.new("ScreenGui", game.CoreGui)
+MiniGui.Name = "MiniKamui"
+MiniGui.ResetOnSpawn = false
 
-        task.wait(3)
+local MiniFrame = Instance.new("Frame", MiniGui)
+MiniFrame.Size = UDim2.new(0,120,0,40)
+MiniFrame.Position = UDim2.new(0.8,0,0.7,0)
+MiniFrame.BackgroundColor3 = Color3.fromRGB(20,20,20)
+MiniFrame.Active = true
+MiniFrame.Draggable = true
 
-        -- 3️⃣ KAMUI
-        RunKamui()
+Instance.new("UICorner", MiniFrame).CornerRadius = UDim.new(0,10)
 
+local MiniBtn = Instance.new("TextButton", MiniFrame)
+MiniBtn.Size = UDim2.new(1,0,1,0)
+MiniBtn.Text = "RIP KAIMUN" -- 🔥 ĐỔI TÊN Ở ĐÂY
+MiniBtn.TextColor3 = Color3.new(1,1,1)
+MiniBtn.BackgroundColor3 = Color3.fromRGB(255,70,150)
+MiniBtn.TextScaled = true
+
+Instance.new("UICorner", MiniBtn).CornerRadius = UDim.new(0,10)
+
+MiniBtn.MouseButton1Click:Connect(function()
+    pcall(function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/Naknohack/RedzUi/refs/heads/main/Kamui%20Dimension.txt"))()
     end)
-
-    -- AUTO KAMUI
-    player.CharacterAdded:Connect(function()
-        task.wait(2)
-        RunKamui()
-    end)
-
-    player:GetPropertyChangedSignal("Team"):Connect(function()
-        task.wait(2)
-        RunKamui()
-    end)
-
 end)
