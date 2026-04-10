@@ -155,7 +155,7 @@ Start.MouseButton1Click:Connect(function()
     end
 end)
 
--- ===== MINI UI RIP KAIMUN =====
+-- ===== MINI UI RIP KAIMUN (FIX FULL) =====
 local MiniGui = Instance.new("ScreenGui", game.CoreGui)
 MiniGui.Name = "RipKaimunUI"
 MiniGui.ResetOnSpawn = false
@@ -180,30 +180,33 @@ Button.Text = "RIP KAIMUN: OFF"
 Button.TextColor3 = Color3.new(1,1,1)
 Button.TextScaled = true
 
+-- 🔥 FIX: không chặn drag
+Button.Active = false
+
+-- ===== TOGGLE =====
 local ON = false
 
 Button.MouseButton1Click:Connect(function()
     ON = not ON
+    
     if ON then
         Button.Text = "RIP KAIMUN: ON"
-        RunKamui()
+        
+        -- chạy loop riêng
+        task.spawn(function()
+            while ON do
+                RunKamui()
+                task.wait(6)
+            end
+        end)
+        
     else
         Button.Text = "RIP KAIMUN: OFF"
     end
 end)
 
--- LOOP MINI
-task.spawn(function()
-    while true do
-        task.wait(6)
-        if ON then
-            RunKamui()
-        end
-    end
-end)
-
--- 🟣 DRAG FOLLOW NGÓN TAY (XỊN - KHÔNG DELTA)
-Frame.Active = true
+-- ===== DRAG FOLLOW NGÓN TAY =====
+local UIS = game:GetService("UserInputService")
 
 local dragging = false
 local offset = Vector2.new(0,0)
@@ -211,9 +214,7 @@ local offset = Vector2.new(0,0)
 Frame.InputBegan:Connect(function(input)
     if input.UserInputType == Enum.UserInputType.Touch then
         dragging = true
-
-        local framePos = Frame.AbsolutePosition
-        offset = input.Position - framePos
+        offset = input.Position - Frame.AbsolutePosition
     end
 end)
 
@@ -226,10 +227,6 @@ end)
 UIS.InputChanged:Connect(function(input)
     if dragging and input.UserInputType == Enum.UserInputType.Touch then
         local pos = input.Position - offset
-
-        Frame.Position = UDim2.new(
-            0, pos.X,
-            0, pos.Y
-        )
+        Frame.Position = UDim2.new(0, pos.X, 0, pos.Y)
     end
 end)
