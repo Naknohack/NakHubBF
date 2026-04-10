@@ -202,15 +202,18 @@ task.spawn(function()
     end
 end)
 
--- DRAG MOBILE MƯỢT
+-- 🟣 DRAG FOLLOW NGÓN TAY (XỊN - KHÔNG DELTA)
+Frame.Active = true
+
 local dragging = false
-local dragStart, startPos
+local offset = Vector2.new(0,0)
 
 Frame.InputBegan:Connect(function(input)
     if input.UserInputType == Enum.UserInputType.Touch then
         dragging = true
-        dragStart = input.Position
-        startPos = Frame.Position
+
+        local framePos = Frame.AbsolutePosition
+        offset = input.Position - framePos
     end
 end)
 
@@ -222,12 +225,11 @@ end)
 
 UIS.InputChanged:Connect(function(input)
     if dragging and input.UserInputType == Enum.UserInputType.Touch then
-        local delta = input.Position - dragStart
+        local pos = input.Position - offset
+
         Frame.Position = UDim2.new(
-            startPos.X.Scale,
-            startPos.X.Offset + delta.X,
-            startPos.Y.Scale,
-            startPos.Y.Offset + delta.Y
+            0, pos.X,
+            0, pos.Y
         )
     end
 end)
