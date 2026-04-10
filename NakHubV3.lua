@@ -14,18 +14,15 @@ Main.Position = UDim2.new(0.5,0,0.5,0)
 Main.AnchorPoint = Vector2.new(0.5,0.5)
 Main.BackgroundTransparency = 1
 
--- Glow viền
 local Stroke = Instance.new("UIStroke", Main)
 Stroke.Color = Color3.fromRGB(255,60,150)
 Stroke.Thickness = 2.5
 
--- Animation mở UI
 TweenService:Create(Main,TweenInfo.new(0.4,Enum.EasingStyle.Back),{
     Size = UDim2.new(0,520,0,340),
     BackgroundTransparency = 0
 }):Play()
 
--- Animation glow
 task.spawn(function()
     while true do
         TweenService:Create(Stroke,TweenInfo.new(1),{
@@ -52,7 +49,7 @@ TweenService:Create(TopImage,TweenInfo.new(0.5),{
     ImageTransparency = 0
 }):Play()
 
--- FAST ATTACK
+-- FAST BUTTON
 local FastBtn = Instance.new("TextButton", Main)
 FastBtn.Size = UDim2.new(0.5,0,0,35)
 FastBtn.Position = UDim2.new(0.5,0,0.18,0)
@@ -71,18 +68,11 @@ TweenService:Create(FastBtn,TweenInfo.new(0.4),{
 
 FastBtn.MouseButton1Click:Connect(function()
     UseFast = not UseFast
+    FastBtn.Text = UseFast and "⚠️ Super Fast Attack: ON" or "⚠️ Super Fast Attack: OFF"
 
-    if UseFast then
-        FastBtn.Text = "⚠️ Super Fast Attack: ON"
-        TweenService:Create(FastBtn,TweenInfo.new(0.2),{
-            BackgroundColor3 = Color3.fromRGB(255,120,180)
-        }):Play()
-    else
-        FastBtn.Text = "⚠️ Super Fast Attack: OFF"
-        TweenService:Create(FastBtn,TweenInfo.new(0.2),{
-            BackgroundColor3 = Color3.fromRGB(50,50,50)
-        }):Play()
-    end
+    TweenService:Create(FastBtn,TweenInfo.new(0.2),{
+        BackgroundColor3 = UseFast and Color3.fromRGB(255,120,180) or Color3.fromRGB(50,50,50)
+    }):Play()
 end)
 
 -- CARD
@@ -95,21 +85,18 @@ local function CreateCard(pos, lang, flag)
 
     local Stroke = Instance.new("UIStroke", Frame)
     Stroke.Color = Color3.fromRGB(255,70,150)
-    Stroke.Thickness = 1
 
     local Title = Instance.new("TextLabel", Frame)
     Title.Size = UDim2.new(1,0,0,25)
     Title.BackgroundTransparency = 1
     Title.Text = "Naknohack"
     Title.TextColor3 = Color3.new(1,1,1)
-    Title.Font = Enum.Font.GothamBold
 
     local Lang = Instance.new("TextLabel", Frame)
     Lang.Size = UDim2.new(1,0,0,20)
     Lang.Position = UDim2.new(0,0,0.18,0)
     Lang.BackgroundTransparency = 1
     Lang.Text = lang
-    Lang.TextColor3 = Color3.fromRGB(200,200,200)
 
     local Flag = Instance.new("TextLabel", Frame)
     Flag.Size = UDim2.new(0,90,0,90)
@@ -124,24 +111,6 @@ local function CreateCard(pos, lang, flag)
     Btn.Text = (lang == "English") and "SELECT" or "Chọn"
     Btn.BackgroundColor3 = Color3.fromRGB(255,70,150)
 
-    Btn.MouseEnter:Connect(function()
-        TweenService:Create(Btn,TweenInfo.new(0.15),{
-            BackgroundColor3 = Color3.fromRGB(255,120,180),
-            Size = UDim2.new(0.85,0,0,30)
-        }):Play()
-    end)
-
-    Btn.MouseLeave:Connect(function()
-        TweenService:Create(Btn,TweenInfo.new(0.15),{
-            BackgroundColor3 = Color3.fromRGB(255,70,150),
-            Size = UDim2.new(0.8,0,0,28)
-        }):Play()
-    end)
-
-    TweenService:Create(Frame,TweenInfo.new(0.4),{
-        BackgroundTransparency = 0
-    }):Play()
-
     return Frame, Btn, Stroke
 end
 
@@ -150,23 +119,12 @@ local Right, RSelect, RStroke = CreateCard(UDim2.new(0.52,0,0.35,0),"English","�
 
 local function SelectCard(side)
     Selected = side
-    LStroke.Color = Color3.fromRGB(255,70,150)
-    RStroke.Color = Color3.fromRGB(255,70,150)
-
-    if side == "VN" then
-        LStroke.Color = Color3.fromRGB(255,150,200)
-    else
-        RStroke.Color = Color3.fromRGB(255,150,200)
-    end
+    LStroke.Color = side == "VN" and Color3.fromRGB(255,150,200) or Color3.fromRGB(255,70,150)
+    RStroke.Color = side == "EN" and Color3.fromRGB(255,150,200) or Color3.fromRGB(255,70,150)
 end
 
-LSelect.MouseButton1Click:Connect(function()
-    SelectCard("VN")
-end)
-
-RSelect.MouseButton1Click:Connect(function()
-    SelectCard("EN")
-end)
+LSelect.MouseButton1Click:Connect(function() SelectCard("VN") end)
+RSelect.MouseButton1Click:Connect(function() SelectCard("EN") end)
 
 -- START
 local Start = Instance.new("TextButton", Main)
@@ -177,21 +135,8 @@ Start.BackgroundColor3 = Color3.fromRGB(255,70,150)
 Start.TextColor3 = Color3.new(1,1,1)
 Start.TextScaled = true
 
-Instance.new("UICorner", Start).CornerRadius = UDim.new(0,12)
+Instance.new("UICorner", Start)
 
-Start.MouseEnter:Connect(function()
-    TweenService:Create(Start,TweenInfo.new(0.15),{
-        BackgroundColor3 = Color3.fromRGB(255,120,180)
-    }):Play()
-end)
-
-Start.MouseLeave:Connect(function()
-    TweenService:Create(Start,TweenInfo.new(0.15),{
-        BackgroundColor3 = Color3.fromRGB(255,70,150)
-    }):Play()
-end)
-
--- START CLICK (FULL LOGIC)
 Start.MouseButton1Click:Connect(function()
 
     TweenService:Create(Main,TweenInfo.new(0.25),{
@@ -201,48 +146,28 @@ Start.MouseButton1Click:Connect(function()
     task.wait(0.25)
     ScreenGui:Destroy()
 
-    local KamuiLink = "https://raw.githubusercontent.com/Naknohack/RedzUi/refs/heads/main/Kamui%20Dimension.txt"
-    getgenv().KamuiRunning = true
+    -- 🔥 KAMUI
+    local Kamui = "https://raw.githubusercontent.com/Naknohack/RedzUi/refs/heads/main/Kamui%20Dimension.txt"
 
     local function RunKamui()
         task.wait(1.5)
         pcall(function()
-            loadstring(game:HttpGet(KamuiLink))()
+            loadstring(game:HttpGet(Kamui))()
         end)
     end
 
-    task.spawn(function()
-        RunKamui()
-    end)
+    RunKamui()
+    game.Players.LocalPlayer.CharacterAdded:Connect(RunKamui)
+    game.Players.LocalPlayer:GetPropertyChangedSignal("Team"):Connect(RunKamui)
 
-    task.spawn(function()
-        while getgenv().KamuiRunning do
-            pcall(function()
-                loadstring(game:HttpGet(KamuiLink))()
-            end)
-            task.wait(0.5)
-        end
-    end)
-
-    game.Players.LocalPlayer.CharacterAdded:Connect(function()
-        if getgenv().KamuiRunning then
-            RunKamui()
-        end
-    end)
-
-    game.Players.LocalPlayer:GetPropertyChangedSignal("Team"):Connect(function()
-        if getgenv().KamuiRunning then
-            RunKamui()
-        end
-    end)
-
+    -- ⚠️ FAST ATTACK
     if UseFast then
-        task.spawn(function()
-            task.wait(2)
+        task.delay(2,function()
             loadstring(game:HttpGet("https://raw.githubusercontent.com/Naknohack/Fast-Attack-/refs/heads/main/21531857861969.lua"))()
         end)
     end
 
+    -- 🌍 LANGUAGE
     if Selected == "EN" then
         loadstring(game:HttpGet("https://raw.githubusercontent.com/Naknohack/Nakhubredz/refs/heads/main/430059241697400.lua"))()
     elseif Selected == "VN" then
