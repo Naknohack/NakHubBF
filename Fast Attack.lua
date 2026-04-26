@@ -18,8 +18,9 @@ local Net = Modules and SafeWaitForChild(Modules, "Net")
 local RegisterAttack = Net and SafeWaitForChild(Net, "RE/RegisterAttack")
 local RegisterHit = Net and SafeWaitForChild(Net, "RE/RegisterHit")
 
+-- 🔥 Bật sẵn
 local Settings = {
-    AutoClick = false,
+    AutoClick = true,
     ClickDelay = 0
 }
 
@@ -79,19 +80,17 @@ function FastAttack:Attack()
     end
 end
 
-function FastAttack:Start()
-    Settings.AutoClick = true
-    task.spawn(function()
-        while Settings.AutoClick do
-            task.wait(Settings.ClickDelay)
-            self:Attack()
+-- 🔥 AUTO RUN NGAY KHI LOAD
+task.spawn(function()
+    while true do
+        task.wait(Settings.ClickDelay)
+        if Settings.AutoClick then
+            pcall(function()
+                FastAttack:Attack()
+            end)
         end
-    end)
-end
-
-function FastAttack:Stop()
-    Settings.AutoClick = false
-end
+    end
+end)
 
 FastAttackModule.FastAttack = FastAttack
 
